@@ -1,0 +1,111 @@
+image: exam-gitlab1.cecs.anu.edu.au:5050/exam/comp1110-exam-2021s1/comp1110-2021-s1-exam-ci:latest
+
+stages:
+  - build
+  - test
+
+before_script:
+  - export CP=src:/exam/comp1110-exam-2021s1.jar:/shared/junit-platform-console-standalone-1.7.0.jar
+  - export JUNIT="java -jar /shared/junit-platform-console-standalone-1.7.0.jar --class-path $CP --disable-banner"
+
+build:
+  tags:
+    - comp1110
+  stage: build
+  script:
+    - javac -encoding utf-8 -cp $CP src/comp1110/exam/*.java
+  artifacts:
+    paths:
+      - src/comp1110/exam/*.class
+
+P2:
+  tags:
+    - comp1110
+  stage: test
+  script:
+    - python3 /exam/checkmc.py p-2.csv 4 abcdef
+  allow_failure: true
+
+Q6:
+  tags:
+    - comp1110
+  stage: test
+  script:
+    - python3 /exam/checkmc.py q-6.csv 4 abcdef
+  allow_failure: true
+
+P1:
+  tags:
+    - comp1110
+  stage: test
+  script:
+    - $JUNIT -c=comp1110.exam.P1HelloWorldTest
+  allow_failure: true
+
+Q1.1:
+  tags:
+    - comp1110
+  stage: test
+  script:
+    - $JUNIT -c=comp1110.exam.Q1FindAllStartingTest
+  allow_failure: true
+
+Q1.2:
+  tags:
+    - comp1110
+  stage: test
+  script:
+    - $JUNIT -c=comp1110.exam.Q1AlternatingTest
+  allow_failure: true
+
+Q2:
+  tags:
+    - comp1110
+  stage: test
+  script:
+    - $JUNIT -c=comp1110.exam.Q2AsciiSumTest
+  allow_failure: true
+
+Q3.1:
+  tags:
+    - comp1110
+  stage: test
+  script:
+    - $JUNIT -c=comp1110.exam.Q3RecipesTest
+  allow_failure: true
+
+Q4:
+  tags:
+    - comp1110
+  stage: test
+  script:
+    - $JUNIT -c=comp1110.exam.Q4ReplicatorTest
+  allow_failure: true
+
+Q5:
+  tags:
+    - comp1110
+  stage: test
+  script:
+    - $JUNIT -c=comp1110.exam.Q5MonarchTest
+  allow_failure: true
+
+Q3.2:
+  tags:
+    - comp1110
+  stage: test
+  script:
+    - good=1; bad=0;
+    - java -jar /shared/junit-platform-console-standalone-1.7.0.jar --class-path /exam/G:$CP --disable-banner -c=comp1110.exam.Q3GetMaxRecipesInCategoryTest || good=0
+    - java -jar /shared/junit-platform-console-standalone-1.7.0.jar --class-path  /exam/B0:$CP --disable-banner -c=comp1110.exam.Q3GetMaxRecipesInCategoryTest || b0=$?
+    - if [ $b0 -eq 1 ]; then bad=$((bad+1)); fi;
+    - java -jar /shared/junit-platform-console-standalone-1.7.0.jar --class-path  /exam/B1:$CP --disable-banner -c=comp1110.exam.Q3GetMaxRecipesInCategoryTest || b1=$?
+    - if [ $b1 -eq 1 ]; then bad=$((bad+1)); fi;
+    - java -jar /shared/junit-platform-console-standalone-1.7.0.jar --class-path  /exam/B2:$CP --disable-banner -c=comp1110.exam.Q3GetMaxRecipesInCategoryTest || b2=$?
+    - if [ $b2 -eq 1 ]; then bad=$((bad+1)); fi;
+    - java -jar /shared/junit-platform-console-standalone-1.7.0.jar --class-path  /exam/B3:$CP --disable-banner -c=comp1110.exam.Q3GetMaxRecipesInCategoryTest || b3=$?
+    - if [ $b3 -eq 1 ]; then bad=$((bad+1)); fi;
+    - if [ $good -eq 0 ]; then echo; echo "Unit test rejected good program."; echo "0/5 marks"; false; fi
+    - if [ $bad -ne 4 ]; then m=$(($bad+1)); echo; echo "Unit test passed good program but only rejected $bad/4 bad programs."; echo "$m/5 marks"; false; fi
+    - if [ $bad -eq 4 ]; then echo; echo "Unit test passed good program and rejected 4 bad programs."; echo "5/5 marks"; fi
+  allow_failure: true
