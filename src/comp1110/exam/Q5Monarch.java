@@ -1,5 +1,6 @@
 package comp1110.exam;
 
+import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -53,7 +54,16 @@ public class Q5Monarch {
     @Override
     public int hashCode() {
         // FIXME complete this method
-        return new Random().nextInt(1000);
+        String s = this.name+this.country;
+        Random ran =new Random(s.length());
+        int sum=0;
+        for (char c: s.toCharArray()){
+            sum=sum+ran.nextInt(c);
+        }
+        sum=sum+this.number*2;
+        return sum%50;
+
+        //return new Random().nextInt(1000);
     }
 
     /**
@@ -63,7 +73,15 @@ public class Q5Monarch {
     @Override
     public boolean equals(Object object) {
         // FIXME complete this method
-        return false;
+        if (object==null) return false;
+        if (object==this) return true;
+        if(!(object instanceof Q5Monarch)) return false;
+
+        Q5Monarch given = (Q5Monarch) object;
+        return Objects.equals(this.name,given.name)&& Objects.equals(this.country,given.country)&&this.number==given.number;
+
+
+        //return false;
     }
 
     @Override

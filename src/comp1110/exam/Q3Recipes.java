@@ -13,6 +13,24 @@ import java.util.*;
  * Each ingredient has a quick reference (String) and a name (String).
  */
 public class Q3Recipes {
+    // main set
+    public Set<Recipe> reSet = new HashSet<>();
+
+    // field
+    public class Recipe{
+        String quickRef;
+        String name;
+        String category;
+        Set<String> ingredients;
+
+        public Recipe(String quickRef, String name, String category, Set<String> ingredients) {
+            this.quickRef = quickRef;
+            this.name = name;
+            this.category = category;
+            this.ingredients = ingredients;
+        }
+    }
+
     /**
      * Add a new recipe to this collection. If a recipe already exists with
      * the given quickRef, do not modify this collection.
@@ -26,7 +44,16 @@ public class Q3Recipes {
      */
     public boolean addRecipe(String quickRef, String name, String category, Set<String> ingredients) {
         // FIXME complete this method
-        return false;
+        Recipe re = new Recipe( quickRef, name, category,  ingredients);
+        // check contains
+        for(Recipe r: reSet){
+            if (Objects.equals(r.quickRef,quickRef)){
+                return false;
+            }
+        }
+
+        this.reSet.add(re);
+        return true;
     }
 
     /**
@@ -38,6 +65,14 @@ public class Q3Recipes {
      */
     public boolean deleteRecipe(String quickRef) {
         // FIXME complete this method
+        if (quickRef==null) return false;
+        for(Recipe r: reSet){
+            if (Objects.equals(r.quickRef,quickRef)){
+                reSet.remove(r);
+                return true;
+            }
+        }
+
         return false;
     }
 
@@ -46,7 +81,7 @@ public class Q3Recipes {
      */
     public int getRecipeCount() {
         // FIXME complete this method
-        return 0;
+        return this.reSet.size();
     }
 
     /**
@@ -58,19 +93,38 @@ public class Q3Recipes {
      */
     public Set<String> getRecipesContaining(String ingredient) {
         // FIXME complete this method
-        return null;
+        Set<String> names = new HashSet<>();
+        if (ingredient==null) return names;
+
+        for(Recipe r: reSet){
+            for (String s :r.ingredients){
+                if (Objects.equals(s,ingredient)){
+                    names.add(r.name);
+                }
+            }
+        }
+
+        return names;
     }
 
     /**
-     * Gets the set of names of all recipes for the given category.
+     * Gets the set of names of all recipes for the given category.--------------------------------------------别忘了
      *
      * @param category the name of the category to search for
      * @return the set of names of all recipes in the given category
      * (if there are no recipes for the category, this will be the empty set)
      */
     public Set<String> getRecipesForCategory(String category) {
+        Set<String> result = new HashSet<>();
+        if (category==null) return result;
+
+        for(Recipe r: reSet){
+            if(Objects.equals(r.category,category)){
+                result.add(r.name);
+            }
+        }
         // FIXME complete this method
-        return null;
+        return result;
     }
 
     /**
@@ -86,7 +140,33 @@ public class Q3Recipes {
      */
     public int getMaxRecipesForIngredient() {
         // FIXME complete this method
-        return -1;
+        Map<String,Set<String>> ingreRe = new HashMap<>();
+
+        for (Recipe r: reSet){
+            for (String s: r.ingredients){
+                // check if exist
+                if (!(ingreRe.keySet().contains(s))){
+                    Set<String> inner = new HashSet<>();
+                    inner.add(r.name);
+                    ingreRe.put(s,inner);
+                }
+                Set<String> old = ingreRe.get(s);
+                old.add(r.name);
+                ingreRe.put(s,old);
+                //
+
+            }
+        }
+
+        int max = 0;
+        Collection<Set<String>> demo = ingreRe.values();
+        for(Set<String> se: demo){
+            if(se.size()>=max){
+                max=se.size();
+            }
+        }
+
+        return max;
     }
 
     /**
@@ -104,7 +184,17 @@ public class Q3Recipes {
      */
     public int getNumCategoriesContaining(String ingredient) {
         // FIXME complete this method
-        return -1;
+        if (ingredient==null) return 0;
+
+        Set<String> aSet = new HashSet<>();
+        for(Recipe r: reSet){
+            if(r.ingredients.contains(ingredient)){
+                aSet.add(r.category);
+            }
+        }
+
+
+        return aSet.size();
     }
 
     /**
@@ -123,7 +213,35 @@ public class Q3Recipes {
      */
     public int getNumCrossCategoryIngredients() {
         // FIXME complete this method
-        return -1;
+        Map<String,Set<String>> ingreCate = new HashMap<>();
+
+        //Seafood----"Entree"/ "Main"
+        for (Recipe r: reSet){
+            for (String s: r.ingredients){
+                // check if exist
+                if (!(ingreCate.keySet().contains(s))){
+                    Set<String> inner = new HashSet<>();
+                    inner.add(r.category);
+                    ingreCate.put(s,inner);
+                }
+                Set<String> old = ingreCate.get(s);
+                old.add(r.category);
+                ingreCate.put(s,old);
+            }
+        }
+
+        int sum=0;
+        Collection<Set<String>> demo = ingreCate.values();
+        for(Set<String> se: demo){
+            if (se.size()>=2){
+                sum++;
+            }
+        }
+
+
+
+
+        return sum;
     }
 
     /**
