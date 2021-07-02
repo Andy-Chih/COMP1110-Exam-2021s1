@@ -22,6 +22,19 @@ package comp1110.exam;
  * array), and does not use any of the Java Collection classes.
  */
 public class Q4Replicator<T extends Object & Q4Replicator.Replicatable> {
+    static final int INITIAL_SIZE= 50;
+    T[] bigArr= (T[])new Object[INITIAL_SIZE];
+    int eleNum=0;
+
+    /*
+    public T replicate(){
+        if (this==null) return null;
+
+
+    }
+
+     */
+
     /**
      * Objects that implement this interface can be replicated.
      * Do not modify this interface.
@@ -47,7 +60,7 @@ public class Q4Replicator<T extends Object & Q4Replicator.Replicatable> {
      */
     public int size() {
         // FIXME complete this method
-        return -1;
+        return this.eleNum;
     }
 
     /**
@@ -57,6 +70,21 @@ public class Q4Replicator<T extends Object & Q4Replicator.Replicatable> {
      */
     public void add(T value) {
         // FIXME complete this method
+        //check capacity
+        if (value==null) return;
+
+        if (this.bigArr.length==this.eleNum){
+            T[] demo = (T[])new Object[this.eleNum+30];
+            System.arraycopy(bigArr,0,demo,0,this.eleNum);
+            this.bigArr=demo;
+        }
+
+        bigArr[eleNum]=value;
+        eleNum++;
+        bigArr[eleNum]= (T) value.replicate();
+        eleNum++;
+
+
     }
 
     /**
@@ -67,7 +95,15 @@ public class Q4Replicator<T extends Object & Q4Replicator.Replicatable> {
      */
     public T remove() throws EmptyReplicatorException {
         // FIXME complete this method
-        return null;
+        if(eleNum==0) throw new EmptyReplicatorException();
+
+        T[] demo = (T[])new Object[this.bigArr.length];
+        T old = bigArr[0];
+        System.arraycopy(this.bigArr,1,demo,0,eleNum-1);
+        bigArr=demo;
+        eleNum--;
+
+        return old;
     }
 
     /**
@@ -79,7 +115,11 @@ public class Q4Replicator<T extends Object & Q4Replicator.Replicatable> {
      */
     public T sneakPeek() throws EmptyReplicatorException {
         // FIXME complete this method
-        return null;
+        if(eleNum==0) throw new EmptyReplicatorException();
+
+        T old = bigArr[0];
+
+        return old;
     }
 
     /**
@@ -92,6 +132,18 @@ public class Q4Replicator<T extends Object & Q4Replicator.Replicatable> {
      */
     public boolean contains(T value) {
         // FIXME complete this method
+        if( value==null) return false;
+
+        for(T t:bigArr){
+            if (t!=null){
+                if (t.equals(value)){
+                    return true;
+                }
+            }
+
+        }
+
+
         return false;
     }
 
@@ -107,6 +159,25 @@ public class Q4Replicator<T extends Object & Q4Replicator.Replicatable> {
      */
     public String toString() {
         // FIXME complete this method
-        return null;
+
+        String s="";
+        if (eleNum==0) return s;
+        T[] demo = (T[])new Object[this.eleNum];
+        StringBuilder sb= new StringBuilder();
+
+        for(int i= eleNum-1;i>=0;i--){
+            demo[i]=bigArr[eleNum-1-i];
+        }
+
+        for (T t: demo){
+            if(t!=null){
+                sb.append(t.toString());
+                sb.append(",");
+            }
+        }
+
+        sb.deleteCharAt(sb.length()-1);
+
+        return sb.toString();
     }
 }
