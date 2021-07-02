@@ -1,5 +1,8 @@
 package comp1110.exam;
 
+import java.util.ArrayList;
+import java.util.Locale;
+
 public class Q1FindAllStarting {
     /**
      * Given an array of strings, find all strings that start with the target char
@@ -18,7 +21,29 @@ public class Q1FindAllStarting {
      */
     public static String[] findAllStarting(String[] in, char target) {
         // FIXME complete this method
-        return null;
+
+        String[] resultDemo={};
+        if (in==null) return resultDemo;
+        if (in.length==0) return resultDemo;
+        // transfer char target-> lowercase char ----b-----
+        String a = (target+"").toLowerCase();
+        char b = a.charAt(0);
+
+        ArrayList<String> demo = new ArrayList<>();
+        for(String s: in){
+            String n = s.toLowerCase();
+            char[] charArr = n.toCharArray();
+            if(charArr[0]==b){
+                demo.add(s);
+            }
+        }
+
+        String[] strArr = new String[demo.size()];
+        for(int i=0; i<strArr.length;i++){
+            strArr[i]=demo.get(i);
+        }
+
+        return strArr;
     }
 }
 

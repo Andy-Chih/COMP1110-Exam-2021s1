@@ -26,14 +26,7 @@ public class Q4Replicator<T extends Object & Q4Replicator.Replicatable> {
     T[] bigArr= (T[])new Object[INITIAL_SIZE];
     int eleNum=0;
 
-    /*
-    public T replicate(){
-        if (this==null) return null;
 
-
-    }
-
-     */
 
     /**
      * Objects that implement this interface can be replicated.
