@@ -105,28 +105,28 @@ public class Q3GetMaxRecipesInCategoryTest {
     @Test
     public void test1Empty(){
         Q3Recipes recipes = new Q3Recipes();
-        assertEquals("getMaxRecipesInCategory() expected to return ", 0, recipes.getMaxRecipesForIngredient());
+        assertEquals("getMaxRecipesInCategory() expected to return ", 0, recipes.getMaxRecipesInCategory());
     }
 
     @Test
     public void test2(){
         Q3Recipes recipes = new Q3Recipes();
         addMoreRecipes1();
-        assertEquals("getMaxRecipesInCategory() expected to return ", 1, recipes.getMaxRecipesForIngredient());
+        assertEquals("getMaxRecipesInCategory() expected to return ", 1, recipes.getMaxRecipesInCategory());
     }
 
     @Test
     public void test3(){
         Q3Recipes recipes = new Q3Recipes();
         addMoreRecipes2();
-        assertEquals("getMaxRecipesInCategory() expected to return ", 2, recipes.getMaxRecipesForIngredient());
+        assertEquals("getMaxRecipesInCategory() expected to return ", 2, recipes.getMaxRecipesInCategory());
     }
 
     @Test
     public void test4(){
         Q3Recipes recipes = new Q3Recipes();
         addMoreRecipes3();
-        assertEquals("getMaxRecipesInCategory() expected to return ", 3, recipes.getMaxRecipesForIngredient());
+        assertEquals("getMaxRecipesInCategory() expected to return ", 3, recipes.getMaxRecipesInCategory());
     }
 
 

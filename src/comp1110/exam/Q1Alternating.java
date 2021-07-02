@@ -57,10 +57,10 @@ public class Q1Alternating {
         String demo = "";
         //check 头元尾辅
         if (isvowel(word.charAt(0)) && isConsonant(word.charAt(word.length() - 1))) {
-            demo = demo + word.charAt(word.length() - 1) + word.charAt(0);
-            String a = demo + alternating(word.substring(1, word.length() - 1));
-            if (a.length()!=word.length()) return "";
-            return a;
+                demo = demo + word.charAt(word.length() - 1) + word.charAt(0);
+                String a = demo + alternating(word.substring(1, word.length() - 1));
+                if (a.length()!=word.length()) return "";
+                return a;
 
         } else if (isvowel(word.charAt(word.length() - 1)) && isConsonant(word.charAt(0))) {
             //OR 头辅尾元
